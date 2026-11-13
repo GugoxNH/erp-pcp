@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "esbuild": "^0.28.2",
+    "jsdom": "^29.1.1"
+  }
+}

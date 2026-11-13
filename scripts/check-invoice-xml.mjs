@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {JSDOM} from '../.tmp/invoice-validation/node_modules/jsdom/lib/api.js';
+import {parseInvoiceXml} from '../lib/invoice-xml.ts';
+globalThis.DOMParser=new JSDOM('').window.DOMParser;
+const paths=process.argv.slice(2);assert.equal(paths.length,2,'Pasa las rutas de los dos XML de ejemplo');
+const data=paths.map(p=>parseInvoiceXml(fs.readFileSync(p,'utf8')));
+assert.equal(data[0].header.Total,'2700.83');assert.equal(data[0].header.Moneda,'USD');assert.equal(data[0].header.Descuento,'656.70');assert.equal(data[0].concepts.length,1);assert.equal(data[0].concepts[0].fields.NoIdentificacion,'1-197781');assert.equal(data[0].header.Folio,undefined);assert.ok(data[0].warnings.length);
+assert.equal(data[1].header.Total,'41335.44');assert.equal(data[1].header.Folio,'4302');assert.equal(data[1].concepts.length,12);assert.equal(data[1].taxes.length,1);assert.equal(data[1].concepts[0].taxes.length,1);
+assert.throws(()=>parseInvoiceXml('<broken>'));assert.throws(()=>parseInvoiceXml('<root/>'));assert.throws(()=>parseInvoiceXml('<!DOCTYPE x><root/>'));
+const xml=fs.readFileSync(paths[1],'utf8');assert.equal(parseInvoiceXml(xml.replaceAll('cfdi:','invoice:').replace('xmlns:cfdi=','xmlns:invoice=')).concepts.length,12);
+console.log('XML reales, conceptos, impuestos sin duplicación, folio ausente, prefijos alternativos y rechazo de XML inválido: OK');

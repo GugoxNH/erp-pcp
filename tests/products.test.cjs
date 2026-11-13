@@ -1,0 +1,17 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const swc = require('next/dist/build/swc');
+require.extensions['.ts'] = (module, filename) => module._compile(swc.transformSync(fs.readFileSync(filename, 'utf8'), { filename, jsc: { parser: { syntax: 'typescript' }, target: 'es2020' }, module: { type: 'commonjs' } }).code, filename);
+const {blankProduct, validateProduct} = require('../lib/products.ts');
+const product = {...blankProduct(), sku:' abc-1 ', name:' Refaccion '};
+assert.equal(validateProduct(product).sku,'ABC-1');
+assert.equal(validateProduct(product).name,'Refaccion');
+assert.equal(validateProduct({...product,active:false}).active,false);
+for (const invalid of [null, {}, {...product,sku:' '}, {...product,name:' '}, {...product,unit:'unknown'}, {...product,active:'true'}, {...product,notes:'x'.repeat(2001)}]) assert.throws(()=>validateProduct(invalid));
+assert.equal(validateProduct({...product,id:'injected',updated_at:'injected'}).id,undefined);
+console.log('PASS: product validation, normalization, limits, units and state.');
+const codes=[{client_id:'bachoco',code:' 00555 '},{client_id:'agrogen',code:'777'}];
+assert.deepEqual(validateProduct({...product,client_codes:codes}).client_codes,[{client_id:'bachoco',code:'00555'},{client_id:'agrogen',code:'777'}]);
+assert.equal(validateProduct({...product,client_codes:[codes[0],{client_id:'agrogen',code:'00555'}]}).client_codes.length,2);
+for(const client_codes of [null,{},[{}],[{client_id:'',code:'1'}],[{client_id:'a',code:' '}],[{client_id:'a',code:'x'.repeat(81)}],[{client_id:'a',code:'abc'},{client_id:'a',code:' ABC '}]]) assert.throws(()=>validateProduct({...product,client_codes}));
+console.log('PASS: client codes, leading zeros, separate clients, duplicates and required fields.');

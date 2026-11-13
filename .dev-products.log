@@ -1,0 +1,239 @@
+
+> erp_pcp@1.0.0 dev
+> node scripts/prepare-pdf.mjs && next dev --hostname 127.0.0.1
+
+▲ Next.js 16.3.7 (Turbopack)
+- Local:         http://127.0.0.1:3000
+- Network:       http://127.0.0.1:3000
+- Environments: .env.local
+✓ Ready in 7.8s
+✓ Running next.config took 25ms
+
+ GET / 200 in 1668ms (next.js: 210ms, proxy.ts: 818ms, application-code: 640ms)
+ POST / 200 in 959ms (next.js: 3ms, proxy.ts: 252ms, application-code: 703ms)
+  └─ ƒ getCatalog() in 685ms app/catalog-actions.ts
+ GET /proveedores 200 in 624ms (next.js: 42ms, proxy.ts: 562ms, application-code: 21ms)
+ POST / 200 in 1013ms (next.js: 3ms, proxy.ts: 237ms, application-code: 773ms)
+  └─ ƒ getCatalog() in 764ms app/catalog-actions.ts
+ POST /proveedores 200 in 665ms (next.js: 3ms, proxy.ts: 317ms, application-code: 345ms)
+  └─ ƒ listSuppliers() in 337ms app/supplier-actions.ts
+ POST /proveedores 200 in 848ms (next.js: 3ms, proxy.ts: 246ms, application-code: 600ms)
+  └─ ƒ getCatalog() in 592ms app/catalog-actions.ts
+ POST /proveedores 200 in 603ms (next.js: 3ms, proxy.ts: 225ms, application-code: 375ms)
+  └─ ƒ listSuppliers() in 366ms app/supplier-actions.ts
+ POST /proveedores 200 in 1173ms (next.js: 4ms, proxy.ts: 510ms, application-code: 659ms)
+  └─ ƒ getCatalog() in 646ms app/catalog-actions.ts
+ POST /proveedores 200 in 1249ms (next.js: 5ms, proxy.ts: 528ms, application-code: 716ms)
+  └─ ƒ getCatalog() in 707ms app/catalog-actions.ts
+ POST /proveedores 200 in 1577ms (next.js: 4ms, proxy.ts: 712ms, application-code: 861ms)
+  └─ ƒ getCatalog() in 851ms app/catalog-actions.ts
+ POST /proveedores 200 in 957ms (next.js: 9ms, proxy.ts: 234ms, application-code: 714ms)
+  └─ ƒ getCatalog() in 705ms app/catalog-actions.ts
+ POST /proveedores 200 in 1576ms (next.js: 5ms, proxy.ts: 675ms, application-code: 896ms)
+  └─ ƒ getCatalog() in 888ms app/catalog-actions.ts
+ POST /proveedores 200 in 1028ms (next.js: 4ms, proxy.ts: 384ms, application-code: 639ms)
+  └─ ƒ getCatalog() in 632ms app/catalog-actions.ts
+ POST /proveedores 200 in 1046ms (next.js: 4ms, proxy.ts: 415ms, application-code: 627ms)
+  └─ ƒ getCatalog() in 620ms app/catalog-actions.ts
+ POST /proveedores 200 in 814ms (next.js: 4ms, proxy.ts: 223ms, application-code: 587ms)
+  └─ ƒ getCatalog() in 579ms app/catalog-actions.ts
+ POST /proveedores 200 in 1374ms (next.js: 4ms, proxy.ts: 558ms, application-code: 813ms)
+  └─ ƒ getCatalog() in 805ms app/catalog-actions.ts
+ POST /proveedores 200 in 1201ms (next.js: 24ms, proxy.ts: 419ms, application-code: 758ms)
+  └─ ƒ getCatalog() in 749ms app/catalog-actions.ts
+ POST /proveedores 200 in 1190ms (next.js: 4ms, proxy.ts: 379ms, application-code: 807ms)
+  └─ ƒ getCatalog() in 799ms app/catalog-actions.ts
+ POST /proveedores 200 in 1029ms (next.js: 3ms, proxy.ts: 426ms, application-code: 600ms)
+  └─ ƒ getCatalog() in 593ms app/catalog-actions.ts
+ POST /proveedores 200 in 1072ms (next.js: 4ms, proxy.ts: 417ms, application-code: 651ms)
+  └─ ƒ getCatalog() in 642ms app/catalog-actions.ts
+ POST /proveedores 200 in 1670ms (next.js: 4ms, proxy.ts: 892ms, application-code: 775ms)
+  └─ ƒ getCatalog() in 766ms app/catalog-actions.ts
+ POST /proveedores 200 in 1352ms (next.js: 8ms, proxy.ts: 624ms, application-code: 720ms)
+  └─ ƒ getCatalog() in 711ms app/catalog-actions.ts
+ GET /proveedores 200 in 544ms (next.js: 14ms, proxy.ts: 493ms, application-code: 37ms)
+ GET /proveedores 200 in 557ms (next.js: 43ms, proxy.ts: 482ms, application-code: 32ms)
+ GET /proveedores 200 in 1230ms (next.js: 4ms, proxy.ts: 862ms, application-code: 365ms)
+ POST /proveedores 200 in 664ms (next.js: 7ms, proxy.ts: 266ms, application-code: 391ms)
+  └─ ƒ listSuppliers() in 381ms app/supplier-actions.ts
+ POST /proveedores 200 in 815ms (next.js: 3ms, proxy.ts: 236ms, application-code: 576ms)
+  └─ ƒ getCatalog() in 564ms app/catalog-actions.ts
+ POST /proveedores 200 in 640ms (next.js: 4ms, proxy.ts: 231ms, application-code: 406ms)
+  └─ ƒ listSuppliers() in 400ms app/supplier-actions.ts
+ POST /proveedores 200 in 822ms (next.js: 5ms, proxy.ts: 242ms, application-code: 576ms)
+  └─ ƒ getCatalog() in 567ms app/catalog-actions.ts
+ POST /proveedores 200 in 628ms (next.js: 4ms, proxy.ts: 279ms, application-code: 345ms)
+  └─ ƒ listSuppliers() in 336ms app/supplier-actions.ts
+ POST /proveedores 200 in 828ms (next.js: 5ms, proxy.ts: 348ms, application-code: 475ms)
+  └─ ƒ listSuppliers() in 465ms app/supplier-actions.ts
+ POST /proveedores 200 in 1336ms (next.js: 3ms, proxy.ts: 661ms, application-code: 672ms)
+  └─ ƒ getCatalog() in 662ms app/catalog-actions.ts
+ POST /proveedores 200 in 1243ms (next.js: 5ms, proxy.ts: 535ms, application-code: 702ms)
+  └─ ƒ getCatalog() in 694ms app/catalog-actions.ts
+ POST /proveedores 200 in 870ms (next.js: 5ms, proxy.ts: 279ms, application-code: 585ms)
+  └─ ƒ getCatalog() in 578ms app/catalog-actions.ts
+ GET /proveedores 200 in 699ms (next.js: 5ms, proxy.ts: 371ms, application-code: 323ms)
+ POST /proveedores 200 in 342ms (next.js: 4ms, proxy.ts: 257ms, application-code: 81ms)
+ POST /proveedores 200 in 605ms (next.js: 4ms, proxy.ts: 231ms, application-code: 370ms)
+  └─ ƒ listSuppliers() in 365ms app/supplier-actions.ts
+ POST /proveedores 200 in 858ms (next.js: 5ms, proxy.ts: 215ms, application-code: 639ms)
+  └─ ƒ getCatalog() in 628ms app/catalog-actions.ts
+ POST /proveedores 200 in 558ms (next.js: 3ms, proxy.ts: 208ms, application-code: 347ms)
+  └─ ƒ listSuppliers() in 342ms app/supplier-actions.ts
+ POST /proveedores 200 in 826ms (next.js: 3ms, proxy.ts: 233ms, application-code: 590ms)
+  └─ ƒ getCatalog() in 580ms app/catalog-actions.ts
+ POST /proveedores 200 in 629ms (next.js: 3ms, proxy.ts: 236ms, application-code: 390ms)
+  └─ ƒ listSuppliers() in 385ms app/supplier-actions.ts
+ POST /proveedores 200 in 582ms (next.js: 3ms, proxy.ts: 219ms, application-code: 360ms)
+  └─ ƒ listSuppliers() in 354ms app/supplier-actions.ts
+ POST /proveedores 200 in 1248ms (next.js: 3ms, proxy.ts: 231ms, application-code: 1014ms)
+  └─ ƒ getCatalog() in 1006ms app/catalog-actions.ts
+ POST /proveedores 200 in 1405ms (next.js: 4ms, proxy.ts: 579ms, application-code: 822ms)
+  └─ ƒ getCatalog() in 803ms app/catalog-actions.ts
+ POST /proveedores 200 in 1397ms (next.js: 3ms, proxy.ts: 659ms, application-code: 736ms)
+  └─ ƒ getCatalog() in 727ms app/catalog-actions.ts
+ GET /compras 200 in 312ms (next.js: 39ms, proxy.ts: 253ms, application-code: 21ms)
+ POST /compras 200 in 881ms (next.js: 5ms, proxy.ts: 251ms, application-code: 626ms)
+  └─ ƒ getCatalog() in 617ms app/catalog-actions.ts
+ POST /compras 200 in 604ms (next.js: 3ms, proxy.ts: 235ms, application-code: 366ms)
+  └─ ƒ listPurchases("jose", "", "all", 0) in 360ms app/purchase-actions.ts
+ POST /compras 200 in 676ms (next.js: 4ms, proxy.ts: 231ms, application-code: 441ms)
+  └─ ƒ purchaseOptions("jose", null) in 436ms app/purchase-actions.ts
+ POST /compras 200 in 1153ms (next.js: 5ms, proxy.ts: 409ms, application-code: 739ms)
+  └─ ƒ getCatalog() in 729ms app/catalog-actions.ts
+ POST /compras 200 in 1218ms (next.js: 3ms, proxy.ts: 406ms, application-code: 808ms)
+  └─ ƒ getCatalog() in 798ms app/catalog-actions.ts
+ POST /compras 200 in 1062ms (next.js: 4ms, proxy.ts: 417ms, application-code: 642ms)
+  └─ ƒ getCatalog() in 634ms app/catalog-actions.ts
+ POST /compras 200 in 1224ms (next.js: 3ms, proxy.ts: 543ms, application-code: 677ms)
+  └─ ƒ getCatalog() in 669ms app/catalog-actions.ts
+ POST /compras 200 in 1257ms (next.js: 4ms, proxy.ts: 534ms, application-code: 719ms)
+  └─ ƒ getCatalog() in 709ms app/catalog-actions.ts
+ GET /compras 200 in 831ms (next.js: 23ms, proxy.ts: 701ms, application-code: 107ms)
+ GET /compras 200 in 523ms (next.js: 18ms, proxy.ts: 445ms, application-code: 60ms)
+ GET /compras 200 in 1417ms (next.js: 15ms, proxy.ts: 962ms, application-code: 440ms)
+ POST /compras 200 in 1001ms (next.js: 26ms, proxy.ts: 268ms, application-code: 708ms)
+  └─ ƒ getCatalog() in 689ms app/catalog-actions.ts
+ POST /compras 200 in 1373ms (next.js: 5ms, proxy.ts: 339ms, application-code: 1028ms)
+  └─ ƒ getCatalog() in 1011ms app/catalog-actions.ts
+ POST /compras 200 in 1019ms (next.js: 3ms, proxy.ts: 392ms, application-code: 623ms)
+  └─ ƒ listPurchases("jose", "", "all", 0) in 610ms app/purchase-actions.ts
+ POST /compras 200 in 955ms (next.js: 5ms, proxy.ts: 465ms, application-code: 485ms)
+  └─ ƒ purchaseOptions("jose", null) in 476ms app/purchase-actions.ts
+ POST /compras 200 in 1170ms (next.js: 4ms, proxy.ts: 435ms, application-code: 731ms)
+  └─ ƒ getCatalog() in 721ms app/catalog-actions.ts
+ POST /compras 200 in 1268ms (next.js: 5ms, proxy.ts: 550ms, application-code: 713ms)
+  └─ ƒ getCatalog() in 703ms app/catalog-actions.ts
+ POST /compras 200 in 1147ms (next.js: 5ms, proxy.ts: 516ms, application-code: 626ms)
+  └─ ƒ getCatalog() in 615ms app/catalog-actions.ts
+ POST /compras 200 in 794ms (next.js: 3ms, proxy.ts: 228ms, application-code: 563ms)
+  └─ ƒ getCatalog() in 551ms app/catalog-actions.ts
+ GET /compras 200 in 570ms (next.js: 3ms, proxy.ts: 277ms, application-code: 289ms)
+ POST /compras 200 in 971ms (next.js: 3ms, proxy.ts: 373ms, application-code: 595ms)
+  └─ ƒ getCatalog() in 587ms app/catalog-actions.ts
+ POST /compras 200 in 886ms (next.js: 3ms, proxy.ts: 266ms, application-code: 617ms)
+  └─ ƒ getCatalog() in 609ms app/catalog-actions.ts
+ POST /compras 200 in 578ms (next.js: 3ms, proxy.ts: 216ms, application-code: 360ms)
+  └─ ƒ listPurchases("jose", "", "all", 0) in 354ms app/purchase-actions.ts
+ POST /compras 200 in 641ms (next.js: 3ms, proxy.ts: 287ms, application-code: 351ms)
+  └─ ƒ purchaseOptions("jose", null) in 345ms app/purchase-actions.ts
+ POST /compras 200 in 1888ms (next.js: 6ms, proxy.ts: 904ms, application-code: 978ms)
+  └─ ƒ getCatalog() in 965ms app/catalog-actions.ts
+ POST /compras 200 in 948ms (next.js: 3ms, proxy.ts: 245ms, application-code: 700ms)
+  └─ ƒ getCatalog() in 691ms app/catalog-actions.ts
+ POST /compras 200 in 854ms (next.js: 3ms, proxy.ts: 208ms, application-code: 643ms)
+  └─ ƒ getCatalog() in 625ms app/catalog-actions.ts
+ POST /compras 200 in 932ms (next.js: 5ms, proxy.ts: 275ms, application-code: 652ms)
+  └─ ƒ getCatalog() in 644ms app/catalog-actions.ts
+ POST /compras 200 in 850ms (next.js: 4ms, proxy.ts: 252ms, application-code: 594ms)
+  └─ ƒ getCatalog() in 585ms app/catalog-actions.ts
+✓ Compiled in 189ms
+ GET /compras 200 in 559ms (next.js: 10ms, proxy.ts: 510ms, application-code: 39ms)
+✓ Compiled in 62ms
+ GET /compras 200 in 302ms (next.js: 9ms, proxy.ts: 250ms, application-code: 44ms)
+ POST /compras 200 in 781ms (next.js: 3ms, proxy.ts: 398ms, application-code: 379ms)
+  └─ ƒ listPurchases("jose", "", "all", 0) in 372ms app/purchase-actions.ts
+ GET /compras 200 in 859ms (next.js: 4ms, proxy.ts: 538ms, application-code: 317ms)
+ POST /compras 200 in 901ms (next.js: 4ms, proxy.ts: 222ms, application-code: 675ms)
+  └─ ƒ getCatalog() in 664ms app/catalog-actions.ts
+ POST /compras 200 in 889ms (next.js: 3ms, proxy.ts: 248ms, application-code: 638ms)
+  └─ ƒ getCatalog() in 631ms app/catalog-actions.ts
+ POST /compras 200 in 658ms (next.js: 4ms, proxy.ts: 255ms, application-code: 399ms)
+  └─ ƒ listPurchases("jose", "", "all", 0) in 392ms app/purchase-actions.ts
+ POST /compras 200 in 655ms (next.js: 6ms, proxy.ts: 257ms, application-code: 392ms)
+  └─ ƒ purchaseOptions("jose", null) in 384ms app/purchase-actions.ts
+ POST /compras 200 in 1311ms (next.js: 6ms, proxy.ts: 409ms, application-code: 896ms)
+  └─ ƒ getCatalog() in 887ms app/catalog-actions.ts
+ POST /compras 200 in 1177ms (next.js: 4ms, proxy.ts: 459ms, application-code: 714ms)
+  └─ ƒ getCatalog() in 698ms app/catalog-actions.ts
+ POST /compras 200 in 1464ms (next.js: 7ms, proxy.ts: 694ms, application-code: 763ms)
+  └─ ƒ getCatalog() in 755ms app/catalog-actions.ts
+ GET /mis-empresas 200 in 560ms (next.js: 40ms, proxy.ts: 501ms, application-code: 19ms)
+ POST /compras 200 in 961ms (next.js: 4ms, proxy.ts: 340ms, application-code: 617ms)
+  └─ ƒ getCatalog() in 610ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 864ms (next.js: 4ms, proxy.ts: 258ms, application-code: 601ms)
+  └─ ƒ getCatalog() in 593ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 782ms (next.js: 3ms, proxy.ts: 210ms, application-code: 569ms)
+  └─ ƒ getCatalog() in 564ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 1203ms (next.js: 3ms, proxy.ts: 516ms, application-code: 684ms)
+  └─ ƒ getCatalog() in 675ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 1098ms (next.js: 4ms, proxy.ts: 426ms, application-code: 668ms)
+  └─ ƒ getCatalog() in 661ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 1799ms (next.js: 4ms, proxy.ts: 902ms, application-code: 893ms)
+  └─ ƒ getCatalog() in 885ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 910ms (next.js: 3ms, proxy.ts: 282ms, application-code: 625ms)
+  └─ ƒ getCatalog() in 618ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 841ms (next.js: 3ms, proxy.ts: 254ms, application-code: 584ms)
+  └─ ƒ getCatalog() in 578ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 651ms (next.js: 7ms, proxy.ts: 225ms, application-code: 420ms)
+  └─ ƒ saveBusiness("taasa", {"city":"","clients":["catalog:Bachoco","catalog:Campi","catalog:Ceat","... 4 items not stringified"],"contact":"","...":"13 items not stringified"}, "2026-10-07T14:11:46.603847+00:00") in 411ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 837ms (next.js: 3ms, proxy.ts: 230ms, application-code: 603ms)
+  └─ ƒ getCatalog() in 594ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 1451ms (next.js: 3ms, proxy.ts: 774ms, application-code: 673ms)
+  └─ ƒ getCatalog() in 665ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 916ms (next.js: 4ms, proxy.ts: 251ms, application-code: 661ms)
+  └─ ƒ getCatalog() in 653ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 672ms (next.js: 4ms, proxy.ts: 250ms, application-code: 418ms)
+  └─ ƒ saveBusiness("jose", {"city":"","clients":["catalog:Agrogen","catalog:Calquimica","catalog:Cargill","... 15 items not stringified"],"contact":"","...":"13 items not stringified"}, "2026-10-07T14:11:46.603847+00:00") in 413ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 887ms (next.js: 4ms, proxy.ts: 258ms, application-code: 625ms)
+  └─ ƒ getCatalog() in 617ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 1081ms (next.js: 5ms, proxy.ts: 415ms, application-code: 661ms)
+  └─ ƒ getCatalog() in 652ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 1461ms (next.js: 3ms, proxy.ts: 792ms, application-code: 665ms)
+  └─ ƒ getCatalog() in 656ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 1030ms (next.js: 4ms, proxy.ts: 255ms, application-code: 771ms)
+  └─ ƒ getCatalog() in 764ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 490ms (next.js: 3ms, proxy.ts: 239ms, application-code: 248ms)
+  └─ ƒ saveBusiness("pcp", {"city":"","clients":["catalog:Audace","catalog:Capistrano","catalog:Cargil Irapuato","... 17 items not stringified"],"contact":"","...":"13 items not stringified"}, "2026-10-07T14:11:46.603847+00:00") in 241ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 779ms (next.js: 4ms, proxy.ts: 433ms, application-code: 342ms)
+  └─ ƒ saveBusiness("pcp", {"city":"","clients":["catalog:Audace","catalog:Capistrano","catalog:Cargil Irapuato","... 17 items not stringified"],"contact":"","...":"13 items not stringified"}, "2026-10-07T14:11:46.603847+00:00") in 336ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 906ms (next.js: 4ms, proxy.ts: 254ms, application-code: 647ms)
+  └─ ƒ getCatalog() in 640ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 1226ms (next.js: 4ms, proxy.ts: 450ms, application-code: 772ms)
+  └─ ƒ getCatalog() in 764ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 892ms (next.js: 5ms, proxy.ts: 234ms, application-code: 653ms)
+  └─ ƒ getCatalog() in 643ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 634ms (next.js: 4ms, proxy.ts: 217ms, application-code: 413ms)
+  └─ ƒ saveBusiness("pcp", {"city":"","clients":["catalog:Audace","catalog:Capistrano","catalog:Cargil Irapuato","... 17 items not stringified"],"contact":"","...":"13 items not stringified"}, "2026-10-07T14:11:46.603847+00:00") in 406ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 923ms (next.js: 4ms, proxy.ts: 220ms, application-code: 700ms)
+  └─ ƒ getCatalog() in 694ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 1227ms (next.js: 3ms, proxy.ts: 565ms, application-code: 659ms)
+  └─ ƒ getCatalog() in 651ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 933ms (next.js: 4ms, proxy.ts: 262ms, application-code: 668ms)
+  └─ ƒ getCatalog() in 660ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 1147ms (next.js: 4ms, proxy.ts: 412ms, application-code: 731ms)
+  └─ ƒ getCatalog() in 721ms app/catalog-actions.ts
+ POST /mis-empresas 200 in 900ms (next.js: 3ms, proxy.ts: 235ms, application-code: 661ms)
+  └─ ƒ getCatalog() in 651ms app/catalog-actions.ts
+ GET /usuarios 200 in 322ms (next.js: 59ms, proxy.ts: 241ms, application-code: 22ms)
+ GET /usuarios 200 in 251ms (next.js: 4ms, proxy.ts: 234ms, application-code: 12ms)
+ POST /usuarios 200 in 882ms (next.js: 4ms, proxy.ts: 375ms, application-code: 504ms)
+  └─ ƒ getUsers() in 497ms app/user-actions.ts
+ POST /usuarios 200 in 871ms (next.js: 3ms, proxy.ts: 264ms, application-code: 604ms)
+  └─ ƒ getCatalog() in 598ms app/catalog-actions.ts
+ POST /usuarios 200 in 752ms (next.js: 4ms, proxy.ts: 262ms, application-code: 486ms)
+  └─ ƒ getUsers() in 480ms app/user-actions.ts
+ POST /usuarios 200 in 1100ms (next.js: 3ms, proxy.ts: 375ms, application-code: 722ms)
+  └─ ƒ getCatalog() in 716ms app/catalog-actions.ts
+ POST /usuarios 200 in 1111ms (next.js: 5ms, proxy.ts: 457ms, application-code: 649ms)
+  └─ ƒ getCatalog() in 639ms app/catalog-actions.ts

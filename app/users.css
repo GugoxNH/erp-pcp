@@ -1,0 +1,12 @@
+.user-access-list { display:flex; flex-wrap:wrap; gap:6px 14px; font-size:12px; line-height:1.6; }
+.user-developer { display:flex; align-items:center; gap:5px; margin-top:8px; color:#167652; }
+.user-password { display:flex; align-items:center; position:relative; }
+.user-password input { padding-right:44px; }
+.user-password button { position:absolute; right:5px; }
+.user-permissions { border:0; border-top:1px solid #dce5e5; margin:6px 0 0; padding:16px 0 0; min-width:0; }
+.user-permissions legend { font-size:14px; font-weight:600; padding-right:12px; }
+.user-permissions-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:18px; }
+.products-workspace .user-check { display:flex; flex-direction:row; align-items:center; gap:9px; }
+.products-workspace .user-check input { width:16px; height:16px; flex:none; }
+.user-all { font-weight:600; }
+@media(max-width:500px) { .user-permissions-grid { grid-template-columns:1fr; } }

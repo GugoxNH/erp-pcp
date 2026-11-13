@@ -1,0 +1,31 @@
+const assert=require('node:assert/strict'),Module=require('node:module'),fs=require('node:fs'),swc=require('next/dist/build/swc');
+require.extensions['.ts']=(m,f)=>m._compile(swc.transformSync(fs.readFileSync(f,'utf8'),{filename:f,jsc:{parser:{syntax:'typescript'},target:'es2020'},module:{type:'commonjs'}}).code,f);
+process.env.GMAIL_TOKEN_ENCRYPTION_KEY='ab'.repeat(32);
+const {sealGmail,openGmail}=require('../lib/gmail-crypto.ts');
+const encrypted=sealGmail('test-refresh-token','owner');
+assert.equal(openGmail(encrypted,'owner'),'test-refresh-token');
+assert.throws(()=>openGmail(encrypted,'another-user'));
+assert.throws(()=>openGmail(encrypted.slice(0,-4)+'xxxx','owner'));
+let allowed=true,saved=0,consumed=false,scopes=['https://www.googleapis.com/auth/gmail.send'],verified=true;
+const chain={eq(){return this},select(){return this},maybeSingle:async()=>({data:consumed?null:{verifier_encrypted:sealGmail('verifier','owner'),expires_at:new Date(Date.now()+60000).toISOString()},error:null})};
+const load=Module._load;
+Module._load=function(name,parent,main){
+ if(name==='server-only')return {};
+ if(name.endsWith('/access-server'))return {requireAccess:async()=>{if(!allowed)throw Error('denied');return {user:{id:'owner'}};}};
+ if(name==='next/headers')return {cookies:async()=>({get:()=>({value:'state'})})};
+ if(name.endsWith('/supabase/admin'))return {createAdminClient:()=>({from:()=>({select:()=>chain,delete:()=>chain}),rpc:async()=>{if(consumed)return {error:{message:'expired'}};consumed=true;saved++;return {error:null};}})};
+ if(name.endsWith('/lib/gmail'))return {GMAIL_COOKIE:'state',GMAIL_SCOPE:'https://www.googleapis.com/auth/gmail.send',gmailConfig:()=>({id:'id'}),gmailClient:()=>({getToken:async()=>({tokens:{access_token:'access',refresh_token:'refresh',id_token:'id'}}),verifyIdToken:async()=>({getPayload:()=>({sub:'subject',email:'me@gmail.com',email_verified:verified,nonce:'state'})}),getTokenInfo:async()=>({scopes})})};
+ return load.call(this,name,parent,main);
+};
+const {GET}=require('../app/api/gmail/callback/route.ts');
+const request=(query='state=state&code=code')=>({nextUrl:new URL('http://localhost/api/gmail/callback?'+query)});
+(async()=>{
+ assert.equal((await GET(request('state=wrong&code=code'))).headers.get('Location'),'/perfil?gmail=expired');assert.equal(saved,0);
+ allowed=false;assert.equal((await GET(request())).headers.get('Location'),'/perfil?gmail=failed');allowed=true;
+ assert.equal((await GET(request())).headers.get('Location'),'/perfil?gmail=connected');assert.equal(saved,1);
+ assert.equal((await GET(request())).headers.get('Location'),'/perfil?gmail=expired');assert.equal(saved,1);
+ consumed=false;scopes=[];assert.equal((await GET(request())).headers.get('Location'),'/perfil?gmail=permission');assert.equal(saved,1);
+ consumed=false;scopes=['https://www.googleapis.com/auth/gmail.send'];verified=false;assert.equal((await GET(request())).headers.get('Location'),'/perfil?gmail=permission');assert.equal(saved,1);
+ consumed=false;assert.equal((await GET(request('state=state&error=access_denied'))).headers.get('Location'),'/perfil?gmail=cancelled');assert.equal(saved,1);
+ console.log('PASS: authenticated encryption, owner binding, OAuth session/state/replay, declined permission, verified identity and cancellation.');
+})().catch(e=>{console.error(e);process.exitCode=1;});

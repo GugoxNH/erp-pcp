@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {validateStockAdjustment} from '../lib/warehouse.ts';
+import {validateAccount} from '../lib/access.ts';
+const adjustment={id:'00000000-0000-4000-8000-000000000001',product_id:'00000000-0000-4000-8000-000000000002',business_id:'pcp',unit:'Pieza',expected:'10.0000',quantity:'0',reason:' Conteo inicial '};
+assert.equal(validateStockAdjustment(adjustment).reason,'Conteo inicial');
+for(const quantity of ['-1','NaN','Infinity','1e3','1.00001','1000000000','999999999.9999',''])assert.throws(()=>validateStockAdjustment({...adjustment,quantity}));
+for(const quantity of ['0','0.0001','999999999'])assert.equal(validateStockAdjustment({...adjustment,quantity}).quantity,quantity);
+assert.throws(()=>validateStockAdjustment({...adjustment,reason:' '}));
+assert.throws(()=>validateStockAdjustment({...adjustment,business_id:'other'}));
+const account={username:'operador',full_name:'Operador',sections:['warehouse'],active:true};
+assert.equal(validateAccount(account).edit_warehouse,false);
+assert.equal(validateAccount({...account,edit_warehouse:true}).edit_warehouse,true);
+assert.throws(()=>validateAccount({...account,edit_warehouse:'true'}));
+console.log('Validaciones de ajustes y permisos: OK');

@@ -1,0 +1,14 @@
+require('./purchase-orders.test.cjs');
+const assert=require('node:assert/strict');
+const {extractConsignment}=require('../lib/consignment-html.ts');
+const {draftFromExtraction}=require('../lib/purchase-orders.ts');
+const headers=['Documento material','Material','Texto breve material','Cantidad entregada para Liquidar','Un.medida','Importe','Mon.','Referencia','Importe To'];
+const data={lines:['Pilgrims Pride','Reporte De Consumos De Material en Consignación','Fecha:','20.01.2026'],rows:[headers,['1380250763','00000000801-022244','CABEZAL','1.000','EA','10,498.00','MXN','T264151923','12,177.6800'],['1380312818','00000000801-022244','CABEZAL','2.000','EA','20,996.00','MXN','T264151923','24,355.3600'],['1380315972','00000000801-022244','CABEZAL','1.000','EA','10,498.00','MXN','T264151923','12,177.6800'],['**','','','4.000','EA','41,992.00','MXN','','48,710.7200']]};
+const order=extractConsignment(data),draft=draftFromExtraction('jose','qa',order,{name:'test.htm',size:100});
+assert.equal(order.materials.length,3);assert.equal(order.id,'T264151923');
+assert.equal(order.subtotal,'41992.00');assert.equal(order.total,'48710.72');
+assert.equal(draft.order_date,'2026-01-20');assert.equal(draft.tax,'6718.72');
+assert.ok(order.materials.every(m=>m.code==='00000000801-022244'&&m.price==='10498'));
+const mixed=structuredClone(data);mixed.rows[2][7]='OTHER';assert.throws(()=>extractConsignment(mixed));
+assert.throws(()=>extractConsignment({lines:[],rows:[]}));
+console.log('PASS: consignment reference, date, codes, totals, summary exclusion and mixed-reference rejection.');

@@ -1,0 +1,21 @@
+
+> erp_pcp@1.0.0 dev
+> node scripts/prepare-pdf.mjs && next dev --hostname 127.0.0.1
+
+⚠ Port 3000 is in use by process 22480, using available port 3001 instead.
+▲ Next.js 16.3.7 (Turbopack)
+- Local:         http://127.0.0.1:3001
+- Network:       http://127.0.0.1:3001
+- Environments: .env.local
+✓ Ready in 733ms
+✓ Running next.config took 17ms
+⨯ Another next dev server is already running.
+
+- Local:        http://127.0.0.1:3000
+- PID:          22480
+- Dir:          C:\erp_pcp
+- Log:          .next\dev\logs\next-development.log
+
+You can access the existing server at http://127.0.0.1:3000,
+or run taskkill /PID 22480 /F to stop it and start a new one.
+[?25h

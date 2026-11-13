@@ -1,0 +1,91 @@
+import {PGlite} from '../.tmp/warehouse-validation/node_modules/@electric-sql/pglite/dist/index.js';
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+const db=new PGlite();
+await db.exec("create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key,email text,raw_user_meta_data jsonb,raw_app_meta_data jsonb);create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('test.uid',true),'')::uuid$$;");
+for(const name of fs.readdirSync('supabase/migrations').sort())await db.exec(fs.readFileSync('supabase/migrations/'+name,'utf8'));
+const actor=randomUUID(),target=randomUUID();
+await db.query('insert into auth.users(id) values($1)',[actor]);
+await db.query("insert into app_profiles(user_id,username,full_name,sections,edit_users) values($1,'tester','Tester',array['orders','users'],true)",[actor]);
+await db.query("select set_config('test.uid',$1,false)",[actor]);
+await db.exec("insert into clients(id,name) values('test','Cliente');insert into business_clients(business_id,client_id) values('pcp','test');");
+const payload={id:randomUUID(),revision:0,business_id:'pcp',client_id:'test',number:'TEST',order_date:'2026-10-26',status:'confirmed',currency:'MXN',tax:'0',source:null,item_delivery_version:4,items:[{id:randomUUID(),kind:'service',subitems:[],description:'Servicio',unit:'Servicio',code:'',quantity:'1',unit_price:'10',discount:'0',commitment_date:'2026-10-27',completed_date:'',fulfillment:'pending'}]};
+await db.query('select save_purchase_order($1)',[payload]);
+const service=payload.items[0].id;
+await db.exec('set role authenticated');
+await assert.rejects(db.query("select service_catalog('pcp')"),/ACCESS_DENIED/);
+await assert.rejects(db.query("select complete_order_service('pcp',$1,1)",[service]),/ACCESS_DENIED/);
+await db.exec('reset role');
+await db.query("update app_profiles set sections=array['services'] where user_id=$1",[actor]);
+await db.exec('set role authenticated');
+let list=(await db.query("select service_catalog('pcp') as data")).rows[0].data;
+assert.equal(list.count,1);assert.equal(list.rows[0].id,service);
+assert.equal((await db.query("select service_catalog('taasa') as data")).rows[0].data.count,0);
+assert.equal((await db.query("select service_catalog('pcp','SERVICIO') as data")).rows[0].data.count,1);
+assert.equal((await db.query("select service_catalog('pcp','%') as data")).rows[0].data.count,0);
+await assert.rejects(db.query("select complete_order_service('taasa',$1,1)",[service]),/SERVICE_NOT_FOUND/);
+await assert.rejects(db.query("select complete_order_service('pcp',$1,999)",[service]),/SERVICE_CONFLICT/);
+const today=(await db.query("select (now() at time zone 'America/Mexico_City')::date::text as d")).rows[0].d;
+const completed=(await db.query("select complete_order_service('pcp',$1,1)::text as d",[service])).rows[0].d;
+assert.equal(completed,today);
+await db.query("select complete_order_service('pcp',$1,1)",[service]); // retry with original revision
+await db.exec('reset role');
+let item=(await db.query('select * from purchase_order_items where id=$1',[service])).rows[0];
+assert.equal(item.fulfillment,'complete');
+assert.equal((await db.query('select commitment_date::text as d from purchase_order_items where id=$1',[service])).rows[0].d,'2026-10-27');
+let order=(await db.query('select * from purchase_orders where id=$1',[payload.id])).rows[0];
+assert.equal(order.fulfillment,'complete');assert.equal(order.revision,2);
+assert.equal((await db.query("select count(*)::int as n from activity_log where action='service.completed'")).rows[0].n,1);
+assert.equal((await db.query("select count(*)::int as n from purchase_order_events where order_id=$1",[payload.id])).rows[0].n,2);
+await db.query("update app_profiles set sections=array['orders','services'],edit_orders=true where user_id=$1",[actor]);
+await assert.rejects(db.query('select save_purchase_order($1)',[{...payload,revision:1}]),/ORDER_CONFLICT/);
+// Multiple services: completing one must not complete the remaining service.
+const multi={...payload,id:randomUUID(),number:'MULTI',items:[{...payload.items[0],id:randomUUID()},{...payload.items[0],id:randomUUID()}]};
+await db.query('select save_purchase_order($1)',[multi]);
+await db.exec('set role authenticated');
+await db.query("select complete_order_service('pcp',$1,1)",[multi.items[0].id]);
+await db.exec('reset role');
+assert.equal((await db.query('select fulfillment from purchase_orders where id=$1',[multi.id])).rows[0].fulfillment,'partial');
+assert.equal((await db.query('select fulfillment from purchase_order_items where id=$1',[multi.items[1].id])).rows[0].fulfillment,'pending');
+await db.exec('set role authenticated');
+await db.query("select complete_order_service('pcp',$1,2)",[multi.items[1].id]);
+await db.exec('reset role');
+assert.equal((await db.query('select fulfillment from purchase_orders where id=$1',[multi.id])).rows[0].fulfillment,'complete');
+for(const status of ['draft','cancelled']){
+ const value={...payload,id:randomUUID(),number:status,status,cancellation_reason:status==='cancelled'?'Prueba':'',items:[{...payload.items[0],id:randomUUID()}]};
+ await db.query('select save_purchase_order($1)',[value]);
+ await db.exec('set role authenticated');
+ await assert.rejects(db.query("select complete_order_service('pcp',$1,1)",[value.items[0].id]),/SERVICE_STATUS/);
+ await db.exec('reset role');
+}
+// Mixed OC: the part remains pending and absent from the service catalog.
+const product=randomUUID();
+await db.query("insert into products(id,sku,name,unit) values($1,'TEST','Producto','Pieza')",[product]);
+await db.query("insert into product_client_codes(product_id,client_id,code) values($1,'test','PART')",[product]);
+const mixed={...payload,id:randomUUID(),number:'MIXED',items:[{...payload.items[0],id:randomUUID()},{...payload.items[0],id:randomUUID(),kind:'parts',code:'PART'}]};
+await db.query('select save_purchase_order($1)',[mixed]);
+await db.exec('set role authenticated');
+await db.query("select complete_order_service('pcp',$1,1)",[mixed.items[0].id]);
+await assert.rejects(db.query("select complete_order_service('pcp',$1,2)",[mixed.items[1].id]),/SERVICE_NOT_FOUND/);
+assert.equal((await db.query("select service_catalog('pcp','MIXED') as data")).rows[0].data.count,1);
+await assert.rejects(db.query("update purchase_order_items set fulfillment='pending',completed_date=null where id=$1",[service]));
+await db.exec('reset role');
+assert.equal((await db.query('select fulfillment from purchase_orders where id=$1',[mixed.id])).rows[0].fulfillment,'partial');
+await db.exec('set role authenticated');
+for(const status of ['pending','partial','complete']){
+ const filtered=(await db.query("select service_catalog('pcp','',0,$1) as data",[status])).rows[0].data;
+ assert.ok(filtered.rows.every(row=>row.fulfillment===status));
+ assert.equal(filtered.count,filtered.rows.length);
+}
+assert.equal((await db.query("select service_catalog('pcp','MIXED',0,'complete') as data")).rows[0].data.count,1);
+assert.equal((await db.query("select service_catalog('pcp','MIXED',0,'pending') as data")).rows[0].data.count,0);
+assert.equal((await db.query("select service_catalog('pcp','',1,'complete') as data")).rows[0].data.rows.length,0);
+await assert.rejects(db.query("select service_catalog('pcp','',0,'invalid')"),/SERVICE_FILTER/);
+await db.exec('reset role');
+await db.query('update app_profiles set active=false where user_id=$1',[actor]);
+await db.exec('set role authenticated');
+await assert.rejects(db.query("select service_catalog('pcp')"),/ACCESS_DENIED/);
+console.log('OK: catálogo automático, acceso, empresa, búsqueda, conflictos, fecha CDMX, fecha programada conservada, reintentos, historial/bitácora, múltiples servicios, OC mixta, borrador/cancelación y escrituras directas.');
+await db.close();
+

@@ -1,0 +1,213 @@
+
+> erp_pcp@1.0.0 dev
+> node scripts/prepare-pdf.mjs && next dev --hostname 127.0.0.1
+
+▲ Next.js 16.3.7 (Turbopack)
+- Local:         http://127.0.0.1:3000
+- Network:       http://127.0.0.1:3000
+- Environments: .env.local
+✓ Ready in 1595ms
+✓ Running next.config took 22ms
+
+ GET /almacen 200 in 4.1s (next.js: 1006ms, proxy.ts: 2.5s, application-code: 582ms)
+ POST /almacen 200 in 1174ms (next.js: 5ms, proxy.ts: 499ms, application-code: 670ms)
+  └─ ƒ listReceipts("pcp", 0) in 648ms app/warehouse-actions.ts
+ POST /almacen 200 in 989ms (next.js: 5ms, proxy.ts: 298ms, application-code: 686ms)
+  └─ ƒ getCatalog() in 674ms app/catalog-actions.ts
+ POST /almacen 200 in 681ms (next.js: 4ms, proxy.ts: 285ms, application-code: 392ms)
+  └─ ƒ listReceipts("pcp", 0) in 385ms app/warehouse-actions.ts
+ POST /almacen 200 in 967ms (next.js: 4ms, proxy.ts: 277ms, application-code: 687ms)
+  └─ ƒ getCatalog() in 677ms app/catalog-actions.ts
+ POST /almacen 200 in 686ms (next.js: 4ms, proxy.ts: 259ms, application-code: 424ms)
+  └─ ƒ listReceipts("jose", 0) in 415ms app/warehouse-actions.ts
+ POST /almacen 200 in 704ms (next.js: 4ms, proxy.ts: 256ms, application-code: 445ms)
+  └─ ƒ listReceipts("jose", 0) in 438ms app/warehouse-actions.ts
+ POST /almacen 200 in 836ms (next.js: 4ms, proxy.ts: 394ms, application-code: 438ms)
+  └─ ƒ getReceiptOptions("jose") in 430ms app/warehouse-actions.ts
+ POST /almacen 200 in 974ms (next.js: 7ms, proxy.ts: 430ms, application-code: 536ms)
+  └─ ƒ saveReceipt({"business_id":"jose","date":"2026-10-16","id":"d09b7086-55f5-4fe2-a4da-060704943041","...":"4 items not stringified"}) in 522ms app/warehouse-actions.ts
+ POST /almacen 200 in 692ms (next.js: 6ms, proxy.ts: 265ms, application-code: 421ms)
+  └─ ƒ listReceipts("jose", 0) in 407ms app/warehouse-actions.ts
+ POST /almacen 200 in 636ms (next.js: 6ms, proxy.ts: 236ms, application-code: 395ms)
+  └─ ƒ getWarehouseBalances("jose") in 385ms app/warehouse-actions.ts
+ POST /almacen 200 in 1416ms (next.js: 4ms, proxy.ts: 545ms, application-code: 867ms)
+  └─ ƒ getCatalog() in 852ms app/catalog-actions.ts
+ POST /almacen 200 in 738ms (next.js: 6ms, proxy.ts: 265ms, application-code: 467ms)
+  └─ ƒ getReceiptOptions("jose") in 461ms app/warehouse-actions.ts
+ POST /almacen 200 in 1759ms (next.js: 6ms, proxy.ts: 736ms, application-code: 1017ms)
+  └─ ƒ getCatalog() in 1007ms app/catalog-actions.ts
+ POST /almacen 200 in 1484ms (next.js: 4ms, proxy.ts: 545ms, application-code: 935ms)
+  └─ ƒ getCatalog() in 927ms app/catalog-actions.ts
+ GET /almacen 200 in 649ms (next.js: 3ms, proxy.ts: 327ms, application-code: 320ms)
+ POST /almacen 200 in 712ms (next.js: 4ms, proxy.ts: 272ms, application-code: 436ms)
+  └─ ƒ listReceipts("pcp", 0) in 426ms app/warehouse-actions.ts
+ POST /almacen 200 in 1325ms (next.js: 3ms, proxy.ts: 329ms, application-code: 993ms)
+  └─ ƒ getCatalog() in 986ms app/catalog-actions.ts
+ POST /almacen 200 in 795ms (next.js: 3ms, proxy.ts: 286ms, application-code: 506ms)
+  └─ ƒ listReceipts("pcp", 0) in 497ms app/warehouse-actions.ts
+ POST /almacen 200 in 899ms (next.js: 4ms, proxy.ts: 250ms, application-code: 645ms)
+  └─ ƒ getCatalog() in 635ms app/catalog-actions.ts
+ POST /almacen 200 in 593ms (next.js: 3ms, proxy.ts: 237ms, application-code: 353ms)
+  └─ ƒ listReceipts("jose", 0) in 347ms app/warehouse-actions.ts
+ POST /almacen 200 in 895ms (next.js: 8ms, proxy.ts: 508ms, application-code: 379ms)
+  └─ ƒ listReceipts("jose", 0) in 372ms app/warehouse-actions.ts
+ POST /almacen 200 in 1335ms (next.js: 3ms, proxy.ts: 589ms, application-code: 742ms)
+  └─ ƒ getCatalog() in 732ms app/catalog-actions.ts
+ GET /almacen 200 in 1028ms (next.js: 6ms, proxy.ts: 669ms, application-code: 352ms)
+ POST /almacen 200 in 694ms (next.js: 5ms, proxy.ts: 300ms, application-code: 390ms)
+  └─ ƒ listReceipts("pcp", 0) in 382ms app/warehouse-actions.ts
+ POST /almacen 200 in 961ms (next.js: 4ms, proxy.ts: 269ms, application-code: 688ms)
+  └─ ƒ getCatalog() in 678ms app/catalog-actions.ts
+ POST /almacen 200 in 633ms (next.js: 3ms, proxy.ts: 241ms, application-code: 389ms)
+  └─ ƒ listReceipts("pcp", 0) in 382ms app/warehouse-actions.ts
+ POST /almacen 200 in 1005ms (next.js: 4ms, proxy.ts: 279ms, application-code: 721ms)
+  └─ ƒ getCatalog() in 715ms app/catalog-actions.ts
+ POST /almacen 200 in 800ms (next.js: 3ms, proxy.ts: 312ms, application-code: 486ms)
+  └─ ƒ listReceipts("taasa", 0) in 480ms app/warehouse-actions.ts
+ POST /almacen 200 in 601ms (next.js: 4ms, proxy.ts: 252ms, application-code: 345ms)
+  └─ ƒ listReceipts("taasa", 0) in 340ms app/warehouse-actions.ts
+ POST /almacen 200 in 1043ms (next.js: 5ms, proxy.ts: 278ms, application-code: 760ms)
+  └─ ƒ getCatalog() in 749ms app/catalog-actions.ts
+ POST /almacen 200 in 1254ms (next.js: 3ms, proxy.ts: 440ms, application-code: 811ms)
+  └─ ƒ getCatalog() in 801ms app/catalog-actions.ts
+ POST /almacen 200 in 2.2s (next.js: 3ms, proxy.ts: 1061ms, application-code: 1175ms)
+  └─ ƒ getCatalog() in 1168ms app/catalog-actions.ts
+ POST /almacen 200 in 944ms (next.js: 3ms, proxy.ts: 288ms, application-code: 654ms)
+  └─ ƒ getCatalog() in 646ms app/catalog-actions.ts
+ GET /compras 200 in 521ms (next.js: 37ms, proxy.ts: 458ms, application-code: 25ms)
+ POST /almacen 200 in 1001ms (next.js: 4ms, proxy.ts: 269ms, application-code: 728ms)
+  └─ ƒ getCatalog() in 721ms app/catalog-actions.ts
+ POST /compras 200 in 956ms (next.js: 3ms, proxy.ts: 280ms, application-code: 673ms)
+  └─ ƒ getCatalog() in 665ms app/catalog-actions.ts
+ GET /almacen 200 in 254ms (next.js: 3ms, proxy.ts: 237ms, application-code: 14ms)
+ POST /compras 200 in 595ms (next.js: 3ms, proxy.ts: 224ms, application-code: 368ms)
+  └─ ƒ listPurchases("taasa", "", "all", 0) in 358ms app/purchase-actions.ts
+ POST /almacen 200 in 852ms (next.js: 4ms, proxy.ts: 241ms, application-code: 606ms)
+ POST /almacen 200 in 648ms (next.js: 4ms, proxy.ts: 247ms, application-code: 396ms)
+  └─ ƒ listReceipts("taasa", 0) in 391ms app/warehouse-actions.ts
+ GET /productos 200 in 293ms (next.js: 33ms, proxy.ts: 243ms, application-code: 17ms)
+ POST /productos 200 in 911ms (next.js: 4ms, proxy.ts: 228ms, application-code: 679ms)
+  └─ ƒ getCatalog() in 667ms app/catalog-actions.ts
+ POST /almacen 200 in 598ms (next.js: 3ms, proxy.ts: 233ms, application-code: 362ms)
+  └─ ƒ listReceipts("taasa", 0) in 355ms app/warehouse-actions.ts
+ POST /productos 200 in 854ms (next.js: 3ms, proxy.ts: 248ms, application-code: 604ms)
+ POST /productos 200 in 757ms (next.js: 3ms, proxy.ts: 224ms, application-code: 531ms)
+  └─ ƒ listProducts() in 525ms app/product-actions.ts
+ POST /productos 200 in 894ms (next.js: 3ms, proxy.ts: 294ms, application-code: 597ms)
+  └─ ƒ getCatalog() in 585ms app/catalog-actions.ts
+ POST /productos 200 in 583ms (next.js: 3ms, proxy.ts: 227ms, application-code: 352ms)
+  └─ ƒ listProducts() in 347ms app/product-actions.ts
+ POST /productos 200 in 606ms (next.js: 3ms, proxy.ts: 235ms, application-code: 368ms)
+  └─ ƒ listProductClients() in 363ms app/product-actions.ts
+ POST /productos 200 in 742ms (next.js: 4ms, proxy.ts: 245ms, application-code: 494ms)
+  └─ ƒ listProductClients() in 487ms app/product-actions.ts
+ POST /productos 200 in 583ms (next.js: 3ms, proxy.ts: 236ms, application-code: 344ms)
+  └─ ƒ listProductSuppliers() in 338ms app/supplier-actions.ts
+ POST /productos 200 in 861ms (next.js: 3ms, proxy.ts: 231ms, application-code: 627ms)
+  └─ ƒ getCatalog() in 620ms app/catalog-actions.ts
+ POST /productos 200 in 628ms (next.js: 3ms, proxy.ts: 239ms, application-code: 386ms)
+  └─ ƒ listProductSuppliers() in 381ms app/supplier-actions.ts
+ GET /almacen 200 in 440ms (next.js: 4ms, proxy.ts: 422ms, application-code: 14ms)
+ POST /almacen 200 in 930ms (next.js: 3ms, proxy.ts: 537ms, application-code: 390ms)
+  └─ ƒ listReceipts("taasa", 0) in 384ms app/warehouse-actions.ts
+ POST /almacen 200 in 1045ms (next.js: 3ms, proxy.ts: 365ms, application-code: 676ms)
+  └─ ƒ getCatalog() in 670ms app/catalog-actions.ts
+ POST /almacen 200 in 818ms (next.js: 3ms, proxy.ts: 401ms, application-code: 414ms)
+  └─ ƒ listReceipts("taasa", 0) in 409ms app/warehouse-actions.ts
+ POST /almacen 200 in 632ms (next.js: 3ms, proxy.ts: 236ms, application-code: 393ms)
+  └─ ƒ getWarehouseBalances("taasa") in 388ms app/warehouse-actions.ts
+ POST /almacen 200 in 1193ms (next.js: 3ms, proxy.ts: 584ms, application-code: 605ms)
+  └─ ƒ listReceipts("taasa", 0) in 599ms app/warehouse-actions.ts
+ POST /almacen 200 in 706ms (next.js: 3ms, proxy.ts: 325ms, application-code: 378ms)
+  └─ ƒ getReceiptOptions("taasa") in 372ms app/warehouse-actions.ts
+ POST /almacen 200 in 1232ms (next.js: 3ms, proxy.ts: 494ms, application-code: 735ms)
+  └─ ƒ getCatalog() in 726ms app/catalog-actions.ts
+ GET /compras 200 in 414ms (next.js: 4ms, proxy.ts: 394ms, application-code: 16ms)
+ POST /compras 200 in 875ms (next.js: 4ms, proxy.ts: 250ms, application-code: 621ms)
+  └─ ƒ getCatalog() in 612ms app/catalog-actions.ts
+ POST /compras 200 in 562ms (next.js: 3ms, proxy.ts: 239ms, application-code: 320ms)
+  └─ ƒ listPurchases("taasa", "", "all", 0) in 313ms app/purchase-actions.ts
+ POST /compras 200 in 660ms (next.js: 3ms, proxy.ts: 255ms, application-code: 402ms)
+  └─ ƒ purchaseOptions("taasa", null) in 398ms app/purchase-actions.ts
+ POST /compras 200 in 1159ms (next.js: 3ms, proxy.ts: 418ms, application-code: 738ms)
+  └─ ƒ getCatalog() in 726ms app/catalog-actions.ts
+ POST /compras 200 in 1303ms (next.js: 4ms, proxy.ts: 575ms, application-code: 725ms)
+  └─ ƒ getCatalog() in 714ms app/catalog-actions.ts
+✓ Compiled in 269ms
+✓ Compiled in 100ms
+ GET /compras 200 in 1670ms (next.js: 11ms, proxy.ts: 1623ms, application-code: 37ms)
+ GET /compras 200 in 390ms (next.js: 4ms, proxy.ts: 348ms, application-code: 38ms)
+ GET /compras 200 in 573ms (next.js: 4ms, proxy.ts: 531ms, application-code: 38ms)
+ GET /compras 200 in 484ms (next.js: 5ms, proxy.ts: 443ms, application-code: 37ms)
+ GET /compras 200 in 354ms (next.js: 5ms, proxy.ts: 315ms, application-code: 33ms)
+✓ Compiled in 45ms
+ GET /compras 200 in 452ms (next.js: 4ms, proxy.ts: 422ms, application-code: 26ms)
+ GET /almacen 200 in 1546ms (next.js: 19ms, proxy.ts: 1038ms, application-code: 488ms)
+ POST /almacen 200 in 767ms (next.js: 4ms, proxy.ts: 329ms, application-code: 435ms)
+  └─ ƒ listReceipts("pcp", 0) in 425ms app/warehouse-actions.ts
+ POST /almacen 200 in 986ms (next.js: 4ms, proxy.ts: 240ms, application-code: 741ms)
+  └─ ƒ getCatalog() in 730ms app/catalog-actions.ts
+ POST /almacen 200 in 674ms (next.js: 3ms, proxy.ts: 249ms, application-code: 422ms)
+  └─ ƒ listReceipts("pcp", 0) in 415ms app/warehouse-actions.ts
+ POST /almacen 200 in 893ms (next.js: 4ms, proxy.ts: 250ms, application-code: 639ms)
+  └─ ƒ getCatalog() in 631ms app/catalog-actions.ts
+ POST /almacen 200 in 650ms (next.js: 3ms, proxy.ts: 245ms, application-code: 402ms)
+  └─ ƒ listReceipts("jose", 0) in 396ms app/warehouse-actions.ts
+ POST /almacen 200 in 619ms (next.js: 4ms, proxy.ts: 229ms, application-code: 385ms)
+  └─ ƒ listReceipts("jose", 0) in 377ms app/warehouse-actions.ts
+ POST /almacen 200 in 678ms (next.js: 5ms, proxy.ts: 258ms, application-code: 414ms)
+  └─ ƒ listShipments("jose", 0) in 405ms app/shipment-actions.ts
+ POST /almacen 200 in 603ms (next.js: 4ms, proxy.ts: 231ms, application-code: 368ms)
+  └─ ƒ listShipments("jose", 0) in 361ms app/shipment-actions.ts
+ POST /almacen 200 in 663ms (next.js: 3ms, proxy.ts: 252ms, application-code: 407ms)
+  └─ ƒ getShippingOptions("jose") in 401ms app/shipment-actions.ts
+ POST /almacen 200 in 1107ms (next.js: 4ms, proxy.ts: 631ms, application-code: 472ms)
+  └─ ƒ saveShipment({"business_id":"jose","date":"2026-10-16","id":"883d817a-db6d-4d8a-aa45-f746c7e0a83f","...":"5 items not stringified"}) in 464ms app/shipment-actions.ts
+ POST /almacen 200 in 694ms (next.js: 3ms, proxy.ts: 256ms, application-code: 434ms)
+  └─ ƒ listShipments("jose", 0) in 428ms app/shipment-actions.ts
+ POST /almacen 200 in 974ms (next.js: 4ms, proxy.ts: 486ms, application-code: 484ms)
+  └─ ƒ getShipment("jose", "883d817a-db6d-4d8a-aa45-f746c7e0a83f") in 475ms app/shipment-actions.ts
+ POST /almacen 200 in 1039ms (next.js: 4ms, proxy.ts: 277ms, application-code: 758ms)
+  └─ ƒ getCatalog() in 749ms app/catalog-actions.ts
+ POST /almacen 200 in 1029ms (next.js: 3ms, proxy.ts: 531ms, application-code: 496ms)
+  └─ ƒ getWarehouseBalances("jose") in 489ms app/warehouse-actions.ts
+ GET /orden-de-compra 200 in 358ms (next.js: 49ms, proxy.ts: 248ms, application-code: 61ms)
+ POST /orden-de-compra 200 in 1196ms (next.js: 5ms, proxy.ts: 313ms, application-code: 878ms)
+  └─ ƒ getCatalog() in 864ms app/catalog-actions.ts
+ POST /orden-de-compra 200 in 794ms (next.js: 3ms, proxy.ts: 311ms, application-code: 480ms)
+  └─ ƒ listOrders("jose", {"kind":"","page":0,"search":"","...":"1 item not stringified"}) in 472ms app/order-actions.ts
+ POST /orden-de-compra 200 in 970ms (next.js: 4ms, proxy.ts: 384ms, application-code: 582ms)
+  └─ ƒ getOrder("jose", "f2514738-85f4-489b-b0d6-367e91d9b4dd") in 574ms app/order-actions.ts
+ POST /orden-de-compra 200 in 654ms (next.js: 4ms, proxy.ts: 232ms, application-code: 418ms)
+  └─ ƒ orderPurchaseAssignments("jose", "f2514738-85f4-489b-b0d6-367e91d9b4dd") in 412ms app/purchase-actions.ts
+ POST /orden-de-compra 200 in 868ms (next.js: 5ms, proxy.ts: 293ms, application-code: 571ms)
+  └─ ƒ orderPurchaseAssignments("jose", "f2514738-85f4-489b-b0d6-367e91d9b4dd") in 564ms app/purchase-actions.ts
+ POST /orden-de-compra 200 in 1354ms (next.js: 5ms, proxy.ts: 455ms, application-code: 894ms)
+  └─ ƒ getCatalog() in 885ms app/catalog-actions.ts
+ POST /orden-de-compra 200 in 1568ms (next.js: 3ms, proxy.ts: 669ms, application-code: 896ms)
+  └─ ƒ getCatalog() in 888ms app/catalog-actions.ts
+ POST /orden-de-compra 200 in 1392ms (next.js: 3ms, proxy.ts: 539ms, application-code: 849ms)
+  └─ ƒ getCatalog() in 839ms app/catalog-actions.ts
+ POST /orden-de-compra 200 in 1339ms (next.js: 3ms, proxy.ts: 636ms, application-code: 701ms)
+  └─ ƒ getCatalog() in 692ms app/catalog-actions.ts
+ POST /orden-de-compra 200 in 1119ms (next.js: 4ms, proxy.ts: 412ms, application-code: 703ms)
+  └─ ƒ getCatalog() in 694ms app/catalog-actions.ts
+ POST /orden-de-compra 200 in 1119ms (next.js: 4ms, proxy.ts: 452ms, application-code: 663ms)
+  └─ ƒ getCatalog() in 656ms app/catalog-actions.ts
+ POST /orden-de-compra 200 in 1281ms (next.js: 3ms, proxy.ts: 532ms, application-code: 746ms)
+  └─ ƒ getCatalog() in 739ms app/catalog-actions.ts
+ POST /orden-de-compra 200 in 1366ms (next.js: 4ms, proxy.ts: 512ms, application-code: 851ms)
+  └─ ƒ getCatalog() in 843ms app/catalog-actions.ts
+ POST /orden-de-compra 200 in 1472ms (next.js: 3ms, proxy.ts: 705ms, application-code: 763ms)
+  └─ ƒ getCatalog() in 754ms app/catalog-actions.ts
+ POST /orden-de-compra 200 in 1860ms (next.js: 4ms, proxy.ts: 999ms, application-code: 856ms)
+  └─ ƒ getCatalog() in 848ms app/catalog-actions.ts
+ POST /orden-de-compra 200 in 1238ms (next.js: 3ms, proxy.ts: 480ms, application-code: 755ms)
+  └─ ƒ getCatalog() in 748ms app/catalog-actions.ts
+ POST /orden-de-compra 200 in 1245ms (next.js: 3ms, proxy.ts: 416ms, application-code: 826ms)
+  └─ ƒ getCatalog() in 818ms app/catalog-actions.ts
+ POST /orden-de-compra 200 in 1335ms (next.js: 3ms, proxy.ts: 523ms, application-code: 808ms)
+  └─ ƒ getCatalog() in 801ms app/catalog-actions.ts
+ POST /orden-de-compra 200 in 1518ms (next.js: 3ms, proxy.ts: 597ms, application-code: 918ms)
+  └─ ƒ getCatalog() in 909ms app/catalog-actions.ts
+ POST /orden-de-compra 200 in 874ms (next.js: 4ms, proxy.ts: 493ms, application-code: 377ms)

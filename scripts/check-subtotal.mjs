@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import {resolveSubtotal} from '../lib/subtotal.ts';
+const order=(subtotal,tax,total)=>({subtotal,tax,total,warnings:[]});
+let value=order('129,500.00','2,072.00','15,022.00');
+resolveSubtotal(value,true);
+assert.equal(value.subtotal,'12,950.00');
+assert.equal(value.subtotalOriginal,'129,500.00');
+assert.equal(value.subtotalSource,'calculated');
+value=order('200.00','16.00','116.00');resolveSubtotal(value,false);
+assert.equal(value.subtotal,'100.00');
+value=order('','0,00','309.816,74');resolveSubtotal(value,true);
+assert.equal(value.subtotal,'309.816,74');
+value=order('','0.02','0.30');resolveSubtotal(value,true);
+assert.equal(value.subtotal,'0.28');
+value=order('100.00','16.00','116.00');resolveSubtotal(value,false);
+assert.equal(value.subtotalSource,undefined);
+for(const [tax,total] of [['','116.00'],['16.00',''],['16.00','10.00'],['1O.00','116.00'],['16.00','1,16.00']]){
+  value=order('',tax,total);resolveSubtotal(value,true);
+  assert.equal(value.subtotal,'');assert.equal(value.subtotalSource,undefined);assert.ok(value.warnings.length);
+}
+value=order('8,950.0000','1,432.0000','10,382.0000');resolveSubtotal(value,false);
+assert.equal(value.subtotalSource,undefined);
+value=order('80,950.0000','1,432.0000','10,382.0000');resolveSubtotal(value,false);
+assert.equal(value.subtotal,'8,950.00');
+value=order('8,950.0000','1,432.0000','10,382.0000');resolveSubtotal(value,true);
+assert.equal(value.subtotal,'8,950.00');assert.equal(value.subtotalSource,'calculated');
+value=order('84,590.000000','13,534.400000','98,124.400000');resolveSubtotal(value,false);
+assert.equal(value.subtotal,'84,590.000000');assert.equal(value.subtotalSource,undefined);
+resolveSubtotal(value,true);
+assert.equal(value.subtotal,'84,590.00');assert.equal(value.subtotalOriginal,'84,590.000000');
+value=order('','6.400,000000','46.400,000000');resolveSubtotal(value,true);
+assert.equal(value.subtotal,'40.000,00');
+console.log('PASS subtotal: OCR, discrepancia, formatos numéricos, redondeo y datos ausentes/inválidos');

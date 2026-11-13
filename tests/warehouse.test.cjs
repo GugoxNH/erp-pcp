@@ -1,0 +1,14 @@
+require('./purchase-orders.test.cjs');
+const assert=require('node:assert/strict');
+const {validateReceipt,localReceiptDate,receiptKey}=require('../lib/warehouse.ts');
+const r={id:crypto.randomUUID(),business_id:'pcp',purchase_id:crypto.randomUUID(),date:localReceiptDate(),reference:' QA ',notes:'',items:[{line_id:crypto.randomUUID(),item_id:null,quantity:'2.125'}]};
+assert.equal(validateReceipt(r).reference,'QA');
+assert.equal(receiptKey(r.items[0]),`${r.items[0].line_id}:stock`);
+for(const quantity of ['-1','0','NaN','1.00001','1e2',''])assert.throws(()=>validateReceipt({...r,items:[{...r.items[0],quantity}]}));
+assert.throws(()=>validateReceipt({...r,items:[]}));
+assert.throws(()=>validateReceipt({...r,items:[r.items[0],r.items[0]]}));
+assert.throws(()=>validateReceipt({...r,date:'2026-02-30'}));
+assert.throws(()=>validateReceipt({...r,date:'2199-01-01'}));
+assert.throws(()=>validateReceipt({...r,business_id:'invalid'}));
+assert.equal(validateReceipt({...r,items:[r.items[0],{...r.items[0],item_id:crypto.randomUUID()}]}).items.length,2);
+console.log('PASS: receipt validation, dates, precision, unique destinations');

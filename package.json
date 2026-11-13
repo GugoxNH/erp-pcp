@@ -1,0 +1,39 @@
+{
+  "name": "erp_pcp",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "node scripts/prepare-pdf.mjs && next dev --hostname 127.0.0.1",
+    "build": "node scripts/prepare-pdf.mjs && next build",
+    "start": "next start --hostname 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "postinstall": "node scripts/prepare-pdf.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Prueba local de extracción de texto PDF para PCP",
+  "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.117.3",
+    "@tesseract.js-data/spa": "^1.0.0",
+    "decimal.js": "^10.6.0",
+    "google-auth-library": "^11.3.1",
+    "lucide-react": "^1.52.0",
+    "next": "^16.3.7",
+    "nodemailer": "^10.5.0",
+    "pdfjs-dist": "^6.3.289",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "sweetalert2": "^11.26.25",
+    "tesseract.js": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "@types/nodemailer": "^8.0.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "agent-browser": "^0.27.0",
+    "typescript": "^7.0.2"
+  },
+  "private": true
+}

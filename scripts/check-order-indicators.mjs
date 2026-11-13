@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {deliveryIndicator,orderIndicator,mexicoToday} from '../lib/order-indicators.ts';
+const today='2026-10-26';
+assert.equal(deliveryIndicator('2026-11-01','confirmed','pending',today),'order-delivery');
+assert.equal(deliveryIndicator('2026-10-31','confirmed','pending',today),'order-delivery upcoming');
+assert.equal(deliveryIndicator(today,'confirmed','partial',today),'order-delivery upcoming');
+assert.equal(deliveryIndicator('2026-10-25','confirmed','pending',today),'order-delivery overdue');
+assert.equal(deliveryIndicator('2026-10-25','confirmed','complete',today),'order-delivery');
+assert.equal(deliveryIndicator('2026-10-25','cancelled','pending',today),'order-delivery');
+assert.equal(deliveryIndicator(null,'confirmed','pending',today),'order-delivery');
+assert.equal(mexicoToday(new Date('2026-10-27T05:59:59Z')),today);
+assert.equal(mexicoToday(new Date('2026-10-27T06:00:00Z')),'2026-10-27');
+assert.equal(orderIndicator('confirmed','pending').className,'registered-pending');
+assert.equal(orderIndicator('confirmed','partial').label,'Registrada');
+assert.equal(orderIndicator('confirmed','complete').label,'Completada');
+assert.equal(orderIndicator('cancelled','complete').label,'Cancelada');
+console.log('OK: límites de cinco días, hoy, vencidas, cambio de día CDMX, canceladas y completadas.');

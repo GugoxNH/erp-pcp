@@ -1,0 +1,67 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const swc = require('next/dist/build/swc');
+require.extensions['.ts'] = (module, filename) => module._compile(swc.transformSync(fs.readFileSync(filename, 'utf8'), {
+  filename, jsc: { parser: { syntax: 'typescript' }, target: 'es2020' }, module: { type: 'commonjs' },
+}).code, filename);
+const { blankItem, deliveryWarnings, deliverySummary, blankOrder, validateOrder, totals, draftFromExtraction, extractedNumber, fulfillmentLabel } = require('../lib/purchase-orders.ts');
+const draft = { ...blankOrder('pcp'), client_id: 'qa', number: ' OC-001 ', order_date: '2026-10-07', items: [{ ...blankItem(), code: 'REF', commitment_date:'2026-10-08', description: 'Part', unit: 'PZA', quantity: '1', unit_price: '2.005', discount: '0.01' }], tax: '0.30' };
+assert.equal(validateOrder(draft).number, 'OC-001');
+assert.deepEqual(totals(draft.items, draft.tax), { amounts: ['2.00'], subtotal: '2.00', total: '2.30' });
+for (const patch of [{ items: [] }, { revision: -1 }, { currency: 'INVALID' }, { order_date: '2026-02-30' }, { tax: '-1' }, { status: 'cancelled', cancellation_reason: '' }]) assert.throws(() => validateOrder({ ...draft, ...patch }));
+for (const patch of [{ quantity: '0' }, { quantity: '1e3' }, { unit_price: 'NaN' }, { unit_price: '1.00001' }, { discount: '3' }, { description: ' ' }]) assert.throws(() => validateOrder({ ...draft, items: [{ ...draft.items[0], ...patch }] }));
+assert.equal(validateOrder({ ...draft, status: 'confirmed', items: [{ ...draft.items[0], fulfillment: 'complete', completed_date: '2026-10-07' }] }).fulfillment, 'complete');
+assert.equal(extractedNumber('$1,234.50'), '1234.5');
+assert.equal(extractedNumber('1.234,50'), '1234.5');
+assert.equal(extractedNumber('1,500'), '1500');
+assert.equal(extractedNumber(''), '');
+const read = { id: 'PDF-01', date: '10/07/2026', currency: 'USD', materials: [{ position: '1', code: 'A', description: 'Top-level', quantity: '2', unit: 'PZA', price: '1,500.00', amount: '3,000.00', page: 1 }, { position: '1.1', code: '', description: 'Subdetail', quantity: '2', unit: '', price: '', amount: '', page: 1, detail: true }], tax: '480', subtotal: '3,000', total: '3,480', warnings: [] };
+const imported = draftFromExtraction('pcp', 'qa', read, { name: 'test.pdf', size: 100 });
+assert.equal(imported.order_date, '2026-07-10', 'default templates use day/month/year');
+assert.equal(imported.items.length, 1, 'detail rows must not double count');
+assert.equal(imported.items[0].unit_price, '1500');
+assert.equal(imported.source.extracted, read, 'original extraction preserved');
+assert.equal(fulfillmentLabel('parts', 'complete'), 'Enviada');
+assert.equal(fulfillmentLabel('service', 'complete'), 'Realizado');
+const { normalizeOrderDate, formatOrderDate } = require('../lib/order-dates.ts');
+for (const source of ['26/01/2026', '26.01.2026', '26-ENE-2026', '26-jan-26', '26 de enero de 2026', 'January 26, 2026', '2026-01-26', '26 01 2026']) assert.equal(normalizeOrderDate(source), '2026-01-26', source);
+for (const template of ['MEI', 'Sherwin', 'Hexpol']) assert.equal(normalizeOrderDate('01/06/2026', template), '2026-01-06');
+assert.equal(normalizeOrderDate('01/06/2026', 'Pilgrims - Tepeji'), '2026-06-01');
+assert.equal(normalizeOrderDate('01/06/2026', 'Taylor farms'), '2026-01-06');
+assert.equal(draftFromExtraction('pcp','qa',{...read,commitmentDate:'2026-08-07'},{name:'test.pdf',size:100}).commitment_date,'2026-08-07');
+for (const source of ['', '31/02/2026', '29/02/2025', '2026-13-01', '26-XYZ-2026']) assert.equal(normalizeOrderDate(source), '', source);
+assert.equal(normalizeOrderDate('29/02/2024'), '2024-02-29');
+assert.equal(normalizeOrderDate('01/13/2026', 'manual'), '');
+assert.equal(formatOrderDate('2026-01-06'), '06/01/2026');
+console.log('PASS: order validation, decimal rounding, status/date rules, extraction review and operational labels.');
+const { orderReviewWarnings } = require('../lib/purchase-orders.ts');
+assert.deepEqual(orderReviewWarnings(blankOrder('pcp')), []);
+const withTax = (tax, subtotal='100') => draftFromExtraction('pcp','qa',{...read,tax,subtotal},{name:'iva.pdf',size:100});
+const autoTax=withTax('');
+assert.equal(autoTax.tax,'16.00');
+assert.equal(autoTax.source.extracted.tax,'','preserve PDF value');
+assert.ok(orderReviewWarnings(autoTax).some(w=>w.includes('se agregó automáticamente')));
+assert.ok(orderReviewWarnings(autoTax).some(w=>w.includes('fecha de entrega')));
+for(const [tax,pattern] of [['0',/IVA en 0/],['8',/menor al 16%/]]) {
+ const parsed=withTax(tax);
+ assert.equal(parsed.tax,tax);
+ assert.ok(orderReviewWarnings(parsed).some(w=>pattern.test(w)));
+}
+assert.equal(withTax('','100.03').tax,'16.00');
+assert.equal(withTax('','').tax,'480.00','fallback to item subtotal');
+assert.equal(withTax('16').source.extracted.warnings.length,read.warnings.length);
+assert.equal(withTax('20').tax,'20');
+const incomplete=draftFromExtraction('pcp','qa',{...read,tax:'',subtotal:'',materials:[]},{name:'empty.pdf',size:1});
+assert.equal(incomplete.tax,'');
+assert.ok(orderReviewWarnings(incomplete).some(w=>w.includes('no se pudo calcular')));
+const early={...draft.items[0],commitment_date:'2026-10-06'};
+assert.equal(validateOrder({...draft,items:[early,{...early,id:crypto.randomUUID(),kind:'service'}]}).kind,'mixed');
+assert.equal(validateOrder({...draft,items:[{...early,kind:'service'}]}).kind,'service');
+assert.throws(()=>validateOrder({...draft,items:[{...early,kind:'mixed'}]}));
+assert.throws(()=>validateOrder({...draft,items:[{...early,kind:undefined}]}));
+assert.equal(validateOrder({...draft,items:[early]}).items[0].commitment_date,'2026-10-06');
+assert.match(deliveryWarnings([early],draft.order_date)[0],/anterior/);
+assert.match(deliveryWarnings([{...draft.items[0],commitment_date:''}],draft.order_date)[0],/no se/);
+assert.equal(deliverySummary([early,{...early,fulfillment:'complete',completed_date:'2026-10-07'}]).fulfillment,'partial');
+for(const patch of [{fulfillment:'bad'},{commitment_date:'2026-02-30'},{fulfillment:'complete'},{completed_date:'2026-10-07'}]) assert.throws(()=>validateOrder({...draft,items:[{...early,...patch}]}));
+

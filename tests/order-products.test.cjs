@@ -1,0 +1,14 @@
+require('./purchase-orders.test.cjs');
+const assert=require('node:assert/strict');
+const {blankOrder,blankItem,validateOrder}=require('../lib/purchase-orders.ts');
+const {missingOrderProducts}=require('../lib/order-products.ts');
+const item={...blankItem(),code:'C-1',description:'Refaccion',commitment_date:'2026-10-13',unit_price:'10'};
+const draft={...blankOrder('pcp'),client_id:'qa',number:'QA',items:[item]};
+for(const patch of [{number:''},{number:' '},{order_date:''},{items:[]}])assert.throws(()=>validateOrder({...draft,...patch}));
+for(const patch of [{code:''},{commitment_date:''},{kind:''},{unit_price:''},{quantity:''},{quantity:'0'}])assert.throws(()=>validateOrder({...draft,items:[{...item,...patch}]}));
+assert.equal(validateOrder({...draft,items:[{...item,kind:'service',code:''}]}).items[0].code,'');
+const products=[{id:'p1',sku:'INTERNAL',name:'Part',unit:'Pieza',codes:[' c-1 ']}];
+assert.deepEqual(missingOrderProducts([item,{...item,kind:'service',code:'ANY'}],products),[]);
+assert.deepEqual(missingOrderProducts([{...item,code:'X'},{...item,code:' x '}],products),[{code:'X',description:'Refaccion',positions:[1,2]}]);
+assert.equal(missingOrderProducts([{...item,code:'INTERNAL'}],products).length,1,'internal SKU does not silently create a customer association');
+console.log('PASS: required fields, service exemption, client code matching and repeated codes.');

@@ -1,0 +1,26 @@
+
+> erp_pcp@1.0.0 dev
+> node scripts/prepare-pdf.mjs && next dev --hostname 127.0.0.1
+
+▲ Next.js 16.3.7 (Turbopack)
+- Local:         http://127.0.0.1:3000
+- Network:       http://127.0.0.1:3000
+- Environments: .env.local
+✓ Ready in 623ms
+✓ Running next.config took 18ms
+
+ GET /compras 200 in 3.5s (next.js: 764ms, proxy.ts: 2.1s, application-code: 640ms)
+ POST /compras 200 in 1193ms (next.js: 6ms, proxy.ts: 276ms, application-code: 911ms)
+  └─ ƒ getCatalog() in 886ms app/catalog-actions.ts
+ POST /compras 200 in 1091ms (next.js: 5ms, proxy.ts: 240ms, application-code: 846ms)
+  └─ ƒ getCatalog() in 839ms app/catalog-actions.ts
+ POST /compras 200 in 734ms (next.js: 3ms, proxy.ts: 244ms, application-code: 486ms)
+  └─ ƒ listPurchases("jose", "", "all", 0) in 480ms app/purchase-actions.ts
+ POST /compras 200 in 666ms (next.js: 6ms, proxy.ts: 283ms, application-code: 377ms)
+  └─ ƒ purchaseOptions("jose", null) in 368ms app/purchase-actions.ts
+ POST /compras 200 in 1174ms (next.js: 6ms, proxy.ts: 503ms, application-code: 665ms)
+  └─ ƒ getCatalog() in 655ms app/catalog-actions.ts
+ POST /compras 200 in 1318ms (next.js: 4ms, proxy.ts: 556ms, application-code: 758ms)
+  └─ ƒ getCatalog() in 748ms app/catalog-actions.ts
+ POST /compras 200 in 1006ms (next.js: 4ms, proxy.ts: 331ms, application-code: 672ms)
+  └─ ƒ getCatalog() in 664ms app/catalog-actions.ts

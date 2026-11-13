@@ -1,0 +1,13 @@
+require('./purchase-orders.test.cjs');
+const assert=require('node:assert/strict');
+const {validateShipment,shippingLimit}=require('../lib/warehouse-shipments.ts');
+const {localReceiptDate}=require('../lib/warehouse.ts');
+const p={id:crypto.randomUUID(),business_id:'pcp',order_id:crypto.randomUUID(),date:localReceiptDate(),reference:' QA ',recipient:'QA',notes:'',items:[{item_id:crypto.randomUUID(),quantity:'1.5'}]};
+assert.equal(validateShipment(p).reference,'QA');
+assert.equal(shippingLimit({pending:'4',reserved:'1.5',available:'2'}),'3.5');
+assert.equal(shippingLimit({pending:'2',reserved:'3',available:'2'}),'2');
+assert.throws(()=>validateShipment({...p,items:[]}));
+assert.throws(()=>validateShipment({...p,items:[p.items[0],p.items[0]]}));
+assert.throws(()=>validateShipment({...p,date:'2026-02-30'}));
+for(const quantity of ['0','-1','1e2','NaN','1.00001'])assert.throws(()=>validateShipment({...p,items:[{...p.items[0],quantity}]}));
+console.log('PASS: shipping quantities, dates, limits and duplicates');

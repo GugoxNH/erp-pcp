@@ -1,0 +1,12 @@
+.orders-workspace .services-toolbar { align-items: center; }
+.orders-workspace .services-toolbar .orders-search { display: flex; margin: 0; }
+.orders-workspace .services-toolbar .orders-search svg { flex-shrink: 0; }
+.orders-workspace .services-toolbar .orders-search input { min-width: 0; width: 100%; }
+.orders-workspace .services-toolbar .services-status { display: flex; flex-direction: row; align-items: center; gap: 8px; }
+.orders-workspace .services-toolbar .services-status select { width: auto; min-width: 150px; }
+.orders-workspace .services-toolbar > .icon-button { flex-shrink: 0; }
+@media (max-width: 600px) {
+  .orders-workspace .services-toolbar .orders-search { flex-basis: 100%; min-width: 0; padding-right: 0; }
+  .orders-workspace .services-toolbar .services-status { flex: 1; }
+  .orders-workspace .services-toolbar .services-status select { flex: 1; min-width: 0; }
+}

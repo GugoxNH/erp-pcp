@@ -1,0 +1,31 @@
+export type InvoiceFields = Record<string,string>;
+export type InvoiceConcept = {fields:InvoiceFields;taxes:InvoiceFields[]};
+export type InvoicePreview = {header:InvoiceFields;issuer:InvoiceFields;receiver:InvoiceFields;stamp:InvoiceFields;concepts:InvoiceConcept[];taxes:InvoiceFields[];taxTotals:InvoiceFields;related:InvoiceFields[];warnings:string[]};
+const namespaces=['http://www.sat.gob.mx/cfd/4','http://www.sat.gob.mx/cfd/3'];
+const fields=(e:Element|null):InvoiceFields=>Object.fromEntries(Array.from(e?.attributes??[]).filter(a=>!a.name.startsWith('xmlns')&&!a.name.includes(':')&&!['Sello','Certificado','SelloCFD','SelloSAT'].includes(a.name)).map(a=>[a.name,a.value]));
+export function parseInvoiceXml(text:string):InvoicePreview {
+ if(text.length>5*1024*1024)throw new Error('El XML supera el límite de 5 MB.');
+ if(/<!DOCTYPE|<!ENTITY/i.test(text))throw new Error('No se admiten XML con DTD o entidades declaradas.');
+ const doc=new DOMParser().parseFromString(text,'application/xml');
+ if(doc.getElementsByTagName('parsererror').length)throw new Error('El archivo XML está incompleto o mal formado.');
+ const root=doc.documentElement,ns=root.namespaceURI??'';
+ if(root.localName!=='Comprobante'||!namespaces.includes(ns)||!['3.3','4.0'].includes(root.getAttribute('Version')??''))throw new Error('Selecciona un comprobante CFDI 3.3 o 4.0.');
+ const children=(e:Element|null,name:string)=>Array.from(e?.children??[]).filter(n=>n.namespaceURI===ns&&n.localName===name);
+ const child=(e:Element|null,name:string)=>children(e,name)[0]??null;
+ const taxRows=(e:Element|null)=>['Traslados','Retenciones'].flatMap(group=>children(child(e,group),group==='Traslados'?'Traslado':'Retencion').map(t=>({Movimiento:group==='Traslados'?'Traslado':'Retención',...fields(t)})));
+ const concepts=children(child(root,'Conceptos'),'Concepto').map(e=>({fields:fields(e),taxes:taxRows(child(e,'Impuestos'))}));
+ if(!child(root,'Emisor')||!child(root,'Receptor')||!concepts.length)throw new Error('Faltan emisor, receptor o conceptos en el comprobante.');
+ if(concepts.length>1000)throw new Error('El XML supera el límite de 1000 conceptos para revisión.');
+ const header=fields(root),warnings:string[]=[];
+ const stamp=fields(child(root,'Complemento')?.getElementsByTagNameNS('http://www.sat.gob.mx/TimbreFiscalDigital','TimbreFiscalDigital')[0]??null);
+ if(!header.Folio)warnings.push('El XML no contiene folio. No se toma el número del nombre del archivo.');
+ if(!stamp.UUID)warnings.push('No se encontró UUID de timbrado.');
+ if(header.TipoDeComprobante!=='I')warnings.push('El tipo de comprobante no es I (Ingreso); revisa si corresponde al movimiento.');
+ for(const k of ['Fecha','Moneda','SubTotal','Total'])if(!header[k])warnings.push(`No se encontró ${k} en el XML.`);
+ const totals=child(root,'Impuestos');
+ const related=children(root,'CfdiRelacionados').flatMap(group=>children(group,'CfdiRelacionado').map(e=>({TipoRelacion:group.getAttribute('TipoRelacion')??'',...fields(e)})));
+ const extra=Array.from(child(root,'Complemento')?.children??[]).filter(e=>e.localName!=='TimbreFiscalDigital').map(e=>e.localName);
+ if(extra.length)warnings.push(`Complementos adicionales no interpretados en esta vista: ${extra.join(', ')}.`);
+ if(child(root,'Addenda'))warnings.push('El XML contiene una Addenda; su contenido no se interpreta en esta primera revisión.');
+ return {header,issuer:fields(child(root,'Emisor')),receiver:fields(child(root,'Receptor')),stamp,concepts,taxes:taxRows(totals),taxTotals:fields(totals),related,warnings};
+}

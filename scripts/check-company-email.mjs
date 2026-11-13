@@ -1,0 +1,26 @@
+import {PGlite} from '../.tmp/warehouse-validation/node_modules/@electric-sql/pglite/dist/index.js';
+import fs from 'node:fs';import assert from 'node:assert/strict';import {randomUUID} from 'node:crypto';
+const db=new PGlite();
+await db.exec("create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key,email text,raw_user_meta_data jsonb,raw_app_meta_data jsonb);create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('test.uid',true),'')::uuid$$;");
+for(const file of fs.readdirSync('supabase/migrations').sort())await db.exec(fs.readFileSync('supabase/migrations/'+file,'utf8'));
+const me=randomUUID(),other=randomUUID(),attempt=randomUUID();
+for(const [id,name] of [[me,'self'],[other,'other']]){await db.query('insert into auth.users(id) values($1)',[id]);await db.query("insert into app_profiles(user_id,username,full_name,sections) values($1,$2,$2,array['purchases'])",[id,name]);}
+await db.exec('set role authenticated');
+await assert.rejects(db.query('select * from company_email_connections'),/permission denied/);
+await assert.rejects(db.query('select begin_company_email_check($1,$2)',[me,attempt]),/permission denied/);
+await db.exec('set role anon');await assert.rejects(db.query('select * from company_email_connections'),/permission denied/);
+await db.exec('set role service_role');
+await db.query('select begin_company_email_check($1,$2)',[me,attempt]);
+await assert.rejects(db.query("select finish_company_email_check($1,$2,'a@pesaje.com.mx','mail.pesaje.com.mx','cipher')",[other,attempt]),/EMAIL_CHECK_EXPIRED/);
+await db.query("select finish_company_email_check($1,$2,'a@pesaje.com.mx','mail.pesaje.com.mx','cipher')",[me,attempt]);
+await assert.rejects(db.query("select finish_company_email_check($1,$2,'a@pesaje.com.mx','mail.pesaje.com.mx','cipher')",[me,attempt]),/EMAIL_CHECK_EXPIRED/);
+assert.equal((await db.query('select count(*)::int as n from company_email_connections')).rows[0].n,1);
+const pending=randomUUID();await db.query('select begin_company_email_check($1,$2)',[me,pending]);
+await db.query('select disconnect_company_email($1)',[me]);
+await assert.rejects(db.query("select finish_company_email_check($1,$2,'a@pesaje.com.mx','mail.pesaje.com.mx','cipher')",[me,pending]),/EMAIL_CHECK_EXPIRED/);
+assert.equal((await db.query('select count(*)::int as n from company_email_connections')).rows[0].n,0);
+for(let i=0;i<3;i++)await db.query('select begin_company_email_check($1,$2)',[me,randomUUID()]);
+await assert.rejects(db.query('select begin_company_email_check($1,$2)',[me,randomUUID()]),/EMAIL_RATE_LIMIT/);
+await db.exec('reset role');await db.query('update app_profiles set active=false where user_id=$1',[other]);await db.exec('set role service_role');
+await assert.rejects(db.query('select begin_company_email_check($1,$2)',[other,randomUUID()]),/PROFILE_FORBIDDEN/);
+await db.close();console.log('PASS: credentials access denied, user isolation, replay, disconnect invalidation, throttling, inactive accounts.');

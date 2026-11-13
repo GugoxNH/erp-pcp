@@ -1,0 +1,42 @@
+-- All fixtures and audit records are rolled back.
+begin;
+select set_config('request.jwt.claim.sub',(select user_id::text from public.app_profiles where is_developer and active limit 1),true);
+set local role authenticated;
+do $$
+declare cid text:='qa-purchases-'||gen_random_uuid(); oid uuid:=gen_random_uuid(); target uuid:=gen_random_uuid();
+ pid uuid; sid uuid:=gen_random_uuid(); purchase uuid:=gen_random_uuid(); line uuid:=gen_random_uuid(); other uuid:=gen_random_uuid();
+ oc jsonb; payload jsonb; second jsonb; result jsonb;
+begin
+ insert into public.clients(id,name) values(cid,cid);
+ insert into public.business_clients(business_id,client_id) values('pcp',cid);
+ insert into public.suppliers(id,name) values(sid,cid);
+ perform public.resolve_order_product('pcp',cid,'QA-CODE',null,jsonb_build_object('sku',cid,'name','QA purchase product','unit','Pieza'));
+ select product_id into pid from public.product_client_codes where client_id=cid and code='QA-CODE';
+ oc:=jsonb_build_object('item_delivery_version',4,'id',oid,'revision',0,'business_id','pcp','client_id',cid,'number',cid,'status','confirmed','order_date','2026-10-15','currency','MXN','tax','0','source',null,'items',jsonb_build_array(jsonb_build_object('id',target,'kind','parts','code','QA-CODE','description','QA','unit','PZA','quantity','6','unit_price','10','discount','0','subitems','[]'::jsonb,'commitment_date','2026-10-16','fulfillment','pending','completed_date','')));
+ perform public.save_purchase_order(oc);
+ payload:=jsonb_build_object('id',purchase,'business_id','pcp','supplier_id',sid,'number',cid,'date','2026-10-15','expected_date','','currency','MXN','status','draft','notes','','tax','16','revision',0,'items',jsonb_build_array(jsonb_build_object('id',line,'product_id',pid,'quantity','10','unit_price','10','allocations',jsonb_build_array(jsonb_build_object('item_id',target,'quantity','4')))));
+ begin perform public.save_supplier_purchase(payload);raise exception 'Unassociated product accepted';exception when raise_exception then if sqlerrm<>'PURCHASE_VENDOR_PRODUCT' then raise;end if;end;
+ perform public.save_product_catalog(to_jsonb(p)||jsonb_build_object('client_codes',jsonb_build_array(jsonb_build_object('client_id',cid,'code','QA-CODE')),'supplier_ids',jsonb_build_array(sid)),pid,p.updated_at) from public.products p where p.id=pid;
+ perform public.save_supplier_purchase(payload);
+ result:=public.supplier_purchase_document('pcp',purchase);
+ if result->>'total'<>'116.00' or result->'items'->0->>'id'<>line::text then raise exception 'Document mismatch';end if;
+ if not exists(select 1 from public.order_purchase_assignments('pcp',oid) where item_id=target and quantity::numeric=4) then raise exception 'Assignment missing';end if;
+ if not exists(select 1 from jsonb_array_elements(public.purchase_options('pcp',null)->'targets') t where t->>'id'=target::text and (t->>'remaining')::numeric=2) then raise exception 'Remaining mismatch';end if;
+ second:=payload||jsonb_build_object('id',other,'number',cid||'-2','items',jsonb_build_array((payload->'items'->0)||jsonb_build_object('id',gen_random_uuid(),'allocations',jsonb_build_array(jsonb_build_object('item_id',target,'quantity','3')))));
+ begin perform public.save_supplier_purchase(second);raise exception 'Excess accepted';exception when raise_exception then if sqlerrm<>'PURCHASE_TARGET_EXCESS' then raise;end if;end;
+ begin perform public.save_supplier_purchase(second||'{"business_id":"jose"}');raise exception 'Cross-company accepted';exception when raise_exception then if sqlerrm<>'PURCHASE_TARGET' then raise;end if;end;
+ begin perform public.save_supplier_purchase(payload);raise exception 'Stale revision accepted';exception when raise_exception then if sqlerrm<>'PURCHASE_CONFLICT' then raise;end if;end;
+ begin perform public.save_purchase_order(jsonb_set(oc||'{"revision":1}','{items,0,quantity}','"7"'));raise exception 'Linked item changed';exception when raise_exception then if sqlerrm<>'ORDER_ITEM_LOCKED' then raise;end if;end;
+ payload:=payload||'{"revision":1,"status":"ordered"}';
+ perform public.save_supplier_purchase(payload);
+ begin perform public.save_supplier_purchase(payload||'{"revision":2}');raise exception 'Emitted changed';exception when raise_exception then if sqlerrm<>'PURCHASE_FINAL' then raise;end if;end;
+ perform public.cancel_supplier_purchase(purchase,'pcp',2,'QA cancellation');
+ if not exists(select 1 from public.activity_log where entity_id=purchase::text and action='supplier_purchase.cancelled') then raise exception 'Audit missing';end if;
+ perform public.save_supplier_purchase(second);
+ if (select count(*) from public.supplier_purchase_events where purchase_id=purchase)<>3 then raise exception 'Events missing';end if;
+ begin delete from public.purchase_allocations where line_id=line;raise exception 'Direct mutation allowed';exception when insufficient_privilege then null;end;
+ perform set_config('request.jwt.claim.sub',gen_random_uuid()::text,true);
+ begin perform public.purchase_options('pcp',null);raise exception 'Unauthorized read';exception when insufficient_privilege then null;end;
+ if exists(select 1 from public.supplier_purchases) then raise exception 'RLS leak';end if;
+end $$;
+rollback;

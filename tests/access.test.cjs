@@ -1,0 +1,18 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const swc=require('next/dist/build/swc');
+require.extensions['.ts']=(m,f)=>m._compile(swc.transformSync(fs.readFileSync(f,'utf8'),{filename:f,jsc:{parser:{syntax:'typescript'},target:'es2020'},module:{type:'commonjs'}}).code,f);
+const {sections,canAccess,firstPath,validateAccount,validateEmail}=require('../lib/access.ts');
+const valid={username:' TEST.user ',full_name:' Test User ',sections:['products'],active:true};
+assert.equal(validateAccount(valid).username,'test.user');
+assert.equal(validateAccount(valid).full_name,'Test User');
+assert.equal(firstPath({...valid,is_developer:false}),'/productos');
+assert.equal(canAccess({...valid,is_developer:false},'users'),false);
+assert.equal(canAccess({...valid,is_developer:true},'users'),true);
+assert.equal(canAccess({...valid,is_developer:true,active:false},'users'),false);
+for(const patch of [{username:'ab'},{username:'user@mail.com'},{full_name:''},{sections:[]},{sections:['unknown']},{sections:['products','products']},{active:'true'}]) assert.throws(()=>validateAccount({...valid,...patch}));
+assert.equal(validateAccount({...valid,is_developer:true}).is_developer,undefined);
+assert.equal(sections.length,6);
+assert.equal(validateEmail(' Usuario@Empresa.com '),'usuario@empresa.com');
+for(const email of ['',null,'usuario','a@b','a b@empresa.com','qa@users.erp.invalid','a'.repeat(255)+'@empresa.com']) assert.throws(()=>validateEmail(email));
+console.log('PASS: account validation, access checks, protected fields and route defaults.');
